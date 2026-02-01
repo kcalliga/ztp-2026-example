@@ -1,0 +1,113 @@
+---
+apiVersion: siteconfig.open-cluster-management.io/v1alpha1
+kind: ClusterInstance
+metadata:
+  name: "phl-sno1"
+  namespace: "phl-sno1"
+spec:
+  additionalNTPSources:
+    - "2600:52:7:59::11"
+  baseDomain: "ocp-poc-demo.com"
+  clusterImageSetNameRef: "img4.20.8-x86-64-appsub"
+  clusterName: "sno3"
+  clusterNetwork:
+    - cidr: "fd01::/48"
+      hostPrefix: 64
+  cpuPartitioningMode: AllNodes
+  extraLabels:
+    ManagedCluster:
+      siteName: "phl"
+      group-du-sno: ""
+      logicalGroup: "active"
+      common-418-disconnected: "false"
+      common-418-resource-usage-test: ""
+  holdInstallation: false
+  installConfigOverrides: |
+    {
+      "capabilities": {
+        "baselineCapabilitySet": "None",
+        "additionalEnabledCapabilities": [
+          "NodeTuning",
+          "OperatorLifecycleManager",
+          "Ingress"
+        ]
+      }
+    }
+  machineNetwork:
+    - cidr: "2600:52:7:59::/64"
+  networkType: "OVNKubernetes"
+  proxy:
+    httpProxy: http://jumphost.inbound.bos2.lab:3128
+    httpsProxy: http://jumphost.inbound.bos2.lab:3128
+    noProxy: .hub.inbound.bos2.lab,9999,5050,6385,8089,6180,6185
+  pullSecretRef:
+    name: "assisted-deployment-pull-secret"
+  serviceNetwork:
+    - cidr: "fd02::/112"
+  sshPublicKey: "<STRING_BASE64_ENCODED>"
+  templateRefs:
+    - name: ai-cluster-templates-v1
+      namespace: open-cluster-management
+  nodes:
+    - automatedCleaningMode: "disabled"
+      bmcAddress: "redfish-virtualmedia://192.168.13.144/redfish/v1/Systems/Self"
+      bmcCredentialsName:
+        name: "sno3-worker"
+      bootMACAddress: "b4:96:91:b6:58:28"
+      bootMode: "UEFI"
+      hostName: "sno3.inbound.bos2.lab"
+      ignitionConfigOverride: "<STRING_REDACTED>"
+      nodeNetwork:
+        interfaces:
+          - name: "ens2f0"
+            macAddress: "b4:96:91:b6:58:28"
+        config:
+          interfaces:
+            - name: ens2f0
+              type: ethernet
+              state: up
+              ipv4:
+                enabled: false
+                dhcp: false
+              ipv6:
+                address:
+                  - ip: 2600:52:7:59::300
+                    prefix-length: 64
+                dhcp: false
+                autoconf: false
+                enabled: true
+            - name: ens2f1
+              type: ethernet
+              state: down
+              ipv4:
+                enabled: false
+                dhcp: false
+              ipv6:
+                dhcp: false
+                autoconf: false
+                enabled: false
+            - name: ens1f1
+              type: ethernet
+              state: down
+              ipv4:
+                enabled: false
+                dhcp: false
+              ipv6:
+                dhcp: false
+                autoconf: false
+                enabled: false
+          dns-resolver:
+            config:
+              server:
+                - 2600:52:7:59::11
+          routes:
+            config:
+              - destination: '::/0'
+                next-hop-address: '2600:52:7:59::1'
+                next-hop-interface: ens2f0
+      role: "master"
+      rootDeviceHints:
+        deviceName: "/dev/disk/by-path/pci-0000:c3:00.0-nvme-1"
+      templateRefs:
+        - name: ai-node-templates-v1
+          namespace: open-cluster-management
