@@ -1,0 +1,47 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: clusters-v2-appset
+  namespace: openshift-gitops
+spec:
+  # Enable go templating so we can create stable app names from paths
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+
+  generators:
+    - git:
+        repoURL: https://github.com/kcalliga/ztp-2026-example.git
+        revision: main
+        directories:
+          # One app per cluster folder
+          - path: site-configs-v2/hub-1/clusters/*
+
+  template:
+    metadata:
+      name: "prov-{{ .path.basename }}"
+      labels:
+        app.kubernetes.io/part-of: provisioning
+        app.kubernetes.io/managed-by: argocd
+    spec:
+      project: default
+
+      source:
+        repoURL: https://github.com/kcalliga/ztp-2026-example.git
+        targetRevision: main
+        path: "{{ .path.path }}"
+
+      destination:
+        server: https://kubernetes.default.svc
+        # Most provisioning manifests should set namespaces explicitly (e.g., cluster namespace),
+        # but Argo requires a destination namespace field.
+        namespace: default
+
+      syncPolicy:
+        # Provisioning is high-impact. Start conservative.
+        automated:
+          selfHeal: true
+          prune: false
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+

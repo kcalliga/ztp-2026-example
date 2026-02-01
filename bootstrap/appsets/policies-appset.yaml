@@ -1,0 +1,51 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: policies-appset
+  namespace: openshift-gitops
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+
+  generators:
+    - git:
+        repoURL: https://github.com/kcalliga/ztp-2026-example.git
+        revision: main
+        directories:
+          # Core generators
+          - path: site-policies/generators/baseline
+          - path: site-policies/generators/topology/*
+          - path: site-policies/generators/capabilities/*
+          - path: site-policies/generators/gitops-bootstrap
+
+          # Optional: site exception generators (only if you actually use them)
+          - path: site-policies/sites/*
+
+  template:
+    metadata:
+      # Ensure uniqueness even if basenames repeat (e.g., "sno" under multiple trees)
+      name: "pol-{{ .path.path | replace \"/\" \"-\" }}"
+      labels:
+        app.kubernetes.io/part-of: governance
+        app.kubernetes.io/managed-by: argocd
+    spec:
+      project: default
+
+      source:
+        repoURL: https://github.com/kcalliga/ztp-2026-example.git
+        targetRevision: main
+        path: "{{ .path.path }}"
+
+      destination:
+        server: https://kubernetes.default.svc
+        # Common place for ACM governance resources; adjust if you standardize on a different namespace.
+        namespace: open-cluster-management
+
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+
