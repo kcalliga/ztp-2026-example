@@ -5,14 +5,12 @@ metadata:
   name: "phl-sno1"
   namespace: "phl-sno1"
 spec:
-  additionalNTPSources:
-    - "2600:52:7:59::11"
   baseDomain: "ocp-poc-demo.com"
   clusterImageSetNameRef: "img4.20.8-x86-64-appsub"
-  clusterName: "sno3"
+  clusterName: "phl-sno1"
   clusterNetwork:
-    - cidr: "fd01::/48"
-      hostPrefix: 64
+    - cidr: "10.128.0.0/14"
+      hostPrefix: 23
   cpuPartitioningMode: AllNodes
   extraLabels:
     ManagedCluster:
@@ -34,80 +32,52 @@ spec:
       }
     }
   machineNetwork:
-    - cidr: "2600:52:7:59::/64"
+    - cidr: "192.168.4.0/24"
   networkType: "OVNKubernetes"
-  proxy:
-    httpProxy: http://jumphost.inbound.bos2.lab:3128
-    httpsProxy: http://jumphost.inbound.bos2.lab:3128
-    noProxy: .hub.inbound.bos2.lab,9999,5050,6385,8089,6180,6185
   pullSecretRef:
     name: "assisted-deployment-pull-secret"
   serviceNetwork:
-    - cidr: "fd02::/112"
-  sshPublicKey: "<STRING_BASE64_ENCODED>"
+    - cidr: "172.30.0.0/16"
+  sshPublicKey: "c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCZ1FEWTRGRlhPcjN5NTJneURWR2VadnRmK0xlM05Ma2xsc0dxSmZLTFdRT3BIcEw3QUZsaWJLL1lCbFpNRDV5VC8vWlZKMWcrQXJlU1pwY2JuZ3ZjVkZkTWhTTDhlRlNIR0RBVDFhWklSVmRQblEvM2VOckxzTGpsZGlSK0hUMTkxUUVIbDNESFkwWnlUMzdybDMwQ1E1eGlVZDcvNVplbWlBcnlwbnhqZWxzYVlJRW5UNVVjUkRPQWszQ0RQYkY4TTBnTk53TkFxS21SR05LY0ptVGdTU0xqSkdEYmx4TkdNazVUSWwyMXl4TlpxSnFEZFFnajRzOWNwME9NNVpQZzFaRTlzeUtTcWcvUGtOY09aNVBWekZyT3BWc1ZKVGlTblRQbFU1Ym1xYnJ3bkgzaWoyUWR0U0JoNGZ6bmNoYVk2ejM4dVQ4RUJ6WHljdXZhSUxMVlZsMlFhL21JVGp1ak1WaWNuRFlwaWxVZW9EbmQ2L1pSNlFaZktuQ0J6L1Q0TVEyNHdDMlRseFhxdE5TcGFJYkFPc05vdmJPdkRtdDVpREQxZ3NSR1hmeXJMakRBelVKS0hPS1dHa0xiY29sR2pTZW1xenZmZURVLzdpQTkwelVoR09SbWJhd1FjUWVSSEV3eklYenBMK1NieTNudHJ4NGEvS0k1U1R3OXJDVEFzUEU9IGtlaXRoQHZwbi1ob3BwZXIuY2FsbGlnYW4ubmFtZQo="
   templateRefs:
     - name: ai-cluster-templates-v1
       namespace: open-cluster-management
   nodes:
     - automatedCleaningMode: "disabled"
-      bmcAddress: "redfish-virtualmedia://192.168.13.144/redfish/v1/Systems/Self"
+      bmcAddress: "redfish-virtualmedia+http://192.168.4.152:8000/redfish/v1/Systems/d5acc567-ce36-4e7b-bbac-a49719e13c51"
       bmcCredentialsName:
-        name: "sno3-worker"
-      bootMACAddress: "b4:96:91:b6:58:28"
+        name: "bmc-phl-sno1-host1"
+      bootMACAddress: "52:54:00:fe:79:03"
       bootMode: "UEFI"
-      hostName: "sno3.inbound.bos2.lab"
-      ignitionConfigOverride: "<STRING_REDACTED>"
+      hostName: "phl-sno1-host1"
       nodeNetwork:
         interfaces:
-          - name: "ens2f0"
-            macAddress: "b4:96:91:b6:58:28"
+          - name: "eno1"
+            macAddress: "52:54:00:fe:79:03"
         config:
           interfaces:
-            - name: ens2f0
+            - name: eno1
               type: ethernet
               state: up
               ipv4:
-                enabled: false
-                dhcp: false
-              ipv6:
                 address:
-                  - ip: 2600:52:7:59::300
-                    prefix-length: 64
-                dhcp: false
-                autoconf: false
+                  - ip: 192.168.4.223
+                    prefix-length: 24
                 enabled: true
-            - name: ens2f1
-              type: ethernet
-              state: down
-              ipv4:
-                enabled: false
                 dhcp: false
               ipv6:
-                dhcp: false
-                autoconf: false
-                enabled: false
-            - name: ens1f1
-              type: ethernet
-              state: down
-              ipv4:
-                enabled: false
-                dhcp: false
-              ipv6:
-                dhcp: false
-                autoconf: false
                 enabled: false
           dns-resolver:
             config:
               server:
-                - 2600:52:7:59::11
+                - 8.8.8.8
+                - 8.8.4.4
           routes:
             config:
-              - destination: '::/0'
-                next-hop-address: '2600:52:7:59::1'
-                next-hop-interface: ens2f0
+              - destination: '0.0.0.0/0'
+                next-hop-address: '192.168.4.1'
+                next-hop-interface: eno1
       role: "master"
-      rootDeviceHints:
-        deviceName: "/dev/disk/by-path/pci-0000:c3:00.0-nvme-1"
       templateRefs:
         - name: ai-node-templates-v1
           namespace: open-cluster-management
