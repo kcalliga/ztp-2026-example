@@ -3,3 +3,4 @@ kind: Kustomization
 
 resources:
   - clusterinstance.yaml
+  - ns.yaml
