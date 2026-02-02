@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - clusterinstance.yaml
   - ns.yaml
+  - extra-manifests/phl-sno1-extra-manifests-cm.yaml

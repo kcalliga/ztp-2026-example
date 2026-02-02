@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: phl-sno1-extra-manifests
+  namespace: phl-sno1
+data:
+  99-phl-sno1-kargs-mc.yaml: |
+    apiVersion: machineconfiguration.openshift.io/v1
+    kind: MachineConfig
+    metadata:
+      name: 99-master-phl-sno1-kargs
+      labels:
+        machineconfiguration.openshift.io/role: master
+    spec:
+      kernelArguments:
+        - "loglevel=4"
+
+  phl-sno1-day1-configmap.yaml: |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: phl-sno1-day1
+      namespace: phl-sno1
+    data:
+      site: "phl"
+      cluster: "phl-sno1"
+      note: "example extra manifest payload"
+
