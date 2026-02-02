@@ -1,0 +1,20 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: baseline-policies
+policyDefaults:
+  namespace: open-cluster-management-policies
+  remediationAction: inform
+  severity: low
+
+  # PolicyGenerator will generate the Placement/Binding based on this selector.
+  placement:
+    labelSelector:
+      matchLabels:
+        logicalGroup: active
+
+policies:
+  - name: baseline-namespace-demo
+    manifests:
+      - path: source-crs/namespace-demo.yaml
+
