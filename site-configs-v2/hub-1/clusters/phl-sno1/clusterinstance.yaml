@@ -11,6 +11,8 @@ spec:
   clusterNetwork:
     - cidr: "10.128.0.0/14"
       hostPrefix: 23
+  extraManifestsRefs:
+    - name: phl-sno1-extra-manifests
   extraLabels:
     ManagedCluster:
       siteName: "phl"
