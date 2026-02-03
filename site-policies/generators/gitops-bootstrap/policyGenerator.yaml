@@ -17,4 +17,6 @@ policies:
   - name: gitops-operator-install
     manifests:
       - path: source-crs/openshift-gitops/openshift-gitops-subscription.yaml
-
+  - name: phl-workload
+    manifests:
+      - path: source-crs/root-workloads-app/phl-sno1-root-workloads-app.yaml
