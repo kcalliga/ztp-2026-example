@@ -14,15 +14,3 @@ data:
     spec:
       kernelArguments:
         - "loglevel=4"
-
-  phl-sno1-day1-configmap.yaml: |
-    apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: phl-sno1-day1
-      namespace: phl-sno1
-    data:
-      site: "phl"
-      cluster: "phl-sno1"
-      note: "example extra manifest payload"
-
