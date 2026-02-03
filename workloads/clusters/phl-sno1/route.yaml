@@ -1,0 +1,15 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: hello-nginx
+  labels:
+    app: hello-nginx
+spec:
+  to:
+    kind: Service
+    name: hello-nginx
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+
