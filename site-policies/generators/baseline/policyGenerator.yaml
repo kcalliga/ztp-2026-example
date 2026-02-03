@@ -17,4 +17,5 @@ policies:
   - name: baseline-namespace-demo
     manifests:
       - path: source-crs/namespaces/namespace-demo.yaml
+      - path: source-crs/gitops/openshift-gitops-subscription.yaml
 
