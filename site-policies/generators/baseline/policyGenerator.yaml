@@ -18,6 +18,6 @@ policies:
     manifests:
       - path: source-crs/namespaces/namespace-demo.yaml
   - name: gitops-operator-install
-    manifests
+    manifests:
       - path: source-crs/gitops/openshift-gitops-subscription.yaml
 
