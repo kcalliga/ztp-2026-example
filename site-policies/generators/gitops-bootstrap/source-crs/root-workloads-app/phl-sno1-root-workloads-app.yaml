@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root-workloads
+  namespace: openshift-gitops
+  labels:
+    app.kubernetes.io/name: root-workloads
+    app.kubernetes.io/part-of: workloads
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/kcalliga/ztp-2026-example.git
+    targetRevision: main
+    path: workloads/clusters/phl-sno1
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openshift-gitops
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+
