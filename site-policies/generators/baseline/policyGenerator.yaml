@@ -16,5 +16,5 @@ policyDefaults:
 policies:
   - name: baseline-namespace-demo
     manifests:
-      - path: source-crs/namespace-demo.yaml
+      - path: source-crs/namespaces/namespace-demo.yaml
 
