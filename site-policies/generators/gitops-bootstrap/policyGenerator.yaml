@@ -1,0 +1,20 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: gitops-operator-policies
+policyDefaults:
+  namespace: open-cluster-management-policies
+  remediationAction: enforce
+  severity: low
+
+  # PolicyGenerator will generate the Placement/Binding based on this selector.
+  placement:
+    labelSelector:
+      matchLabels:
+        logicalGroup: active
+
+policies:
+  - name: gitops-operator-install
+    manifests:
+      - path: source-crs/openshift-gitops/openshift-gitops-subscription.yaml
+
