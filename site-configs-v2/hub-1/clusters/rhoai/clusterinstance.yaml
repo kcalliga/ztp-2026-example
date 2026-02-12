@@ -34,9 +34,9 @@ spec:
       namespace: open-cluster-management
   nodes:
     - automatedCleaningMode: "disabled"
-      bmcAddress: "redfish-virtualmedia+http://192.168.4.153:8000/redfish/v1/Systems/6ffbce0c-42de-4537-8079-633eca1962e9""
+      bmcAddress: "redfish-virtualmedia+http://192.168.4.153:8000/redfish/v1/Systems/6ffbce0c-42de-4537-8079-633eca1962e9"
       bmcCredentialsName:
-        name: "bmc-rhoai-host1"
+        name: "bmc-rhoai"
       bootMACAddress: "52:54:00:18:10:5b"
       bootMode: "UEFI"
       hostName: "rhoai-host1"
