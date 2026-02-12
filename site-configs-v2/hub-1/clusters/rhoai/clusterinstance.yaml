@@ -7,7 +7,7 @@ metadata:
 spec:
   baseDomain: "ocp-poc-demo.com"
   clusterImageSetNameRef: "img4.20.8-x86-64-appsub"
-  clusterName: "phl-sno1"
+  clusterName: "rhoai"
   clusterNetwork:
     - cidr: "10.128.0.0/14"
       hostPrefix: 23
